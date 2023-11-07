@@ -17,14 +17,8 @@ int main(void) {
     struct cadastro *prim = NULL;
     int opc, idade, pri = 0;
     char nome[40];
-
     FILE *fp;
-    fp = fopen("info.txt", "a+");
-
-    if (fp == NULL) {
-        printf("Arquivo não criado.\n");
-        exit(-1);
-    }
+    
 
     while (opc != 5) {
         puts("Bem vindo à criação de cadastro agro-pesca jacaré.\nO que deseja fazer?\n 1 - Criar cadastro\n 2 - Ver cadastros\n 3 - Escrever no txt\n 4 - Carregar a lista\n 5 - Sair");
@@ -55,35 +49,52 @@ int main(void) {
                     printf("Idade: %d\n", c2->idade);
                     c2 = c2->prox;
                 }
-                free(c2);
                 break;
             case 3:
+                fp = fopen("info.txt", "w");
+
+                if (fp == NULL) {
+                    printf("Arquivo não criado.\n");
+                    exit(-1);
+                }
+
                 c3 = prim;
                 while (c3 != NULL) {
                     fwrite(c3->nome, sizeof(char), 40, fp);
                     fwrite(&c3->idade, sizeof(int), 1, fp);
                     c3 = c3->prox;
                 }
-                free(c3);
-            case 4:
-                while (c1 != NULL)
-                {
-                    if (pri == 0 ){
-                    prim = malloc(sizeof(struct cadastro));
-                    c1=prim;
-                    fread(prim->nome, sizeof(char), 40, fp);
-                    fread(&prim->idade, sizeof(int), 1 , fp);
-                    }
-                    else{
-                        c1->prox = malloc(sizeof(struct cadastro));
-                        c1 = c1->prox;
-                        fread(prim->nome, sizeof(char), 40, fp);
-                        fread(&prim->idade, sizeof(int), 1 , fp);
-
-                    }
-                }
-
+                fclose(fp);
                 break;
+            
+            case 4:
+                fp = fopen("info.txt","r");
+                while (!feof(fp))
+                {
+                if (!pri) 
+                {
+                    pri = 1;
+                    prim = malloc(sizeof(struct cadastro));
+                    c1 = prim ;
+                    int f = 0;
+                    f = fread(prim->nome, sizeof(char),40,fp);
+                    if ( f == 40)
+                        f = fread(&prim->idade, sizeof(int),1, fp);
+                } 
+                else 
+                {
+                    c1->prox = malloc(sizeof(struct cadastro));
+                    c1 = c1->prox;
+                    int f = 0;
+                    f = fread(c1->nome, sizeof(char),40,fp);
+                    if ( f == 40)
+                        f = fread(&c1->idade, sizeof(int),1, fp);
+                }
+                }
+                fclose(fp);
+                break;
+               
+            
         }
     }
     printf("%s", prim->nome);
