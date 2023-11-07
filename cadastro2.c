@@ -50,6 +50,7 @@ int main(void) {
                     printf("Idade: %d  \n", c2->idade);
                     c2 = c2->prox;
                 }
+                free(c2);
                 break;
             case 3:
                 if ((fp = fopen("info.txt","w")) == NULL){
@@ -64,6 +65,7 @@ int main(void) {
                     c3 = c3->prox;
                 }
                 fclose(fp);
+                free(c3);
                 break;
             
             case 4:
@@ -111,6 +113,6 @@ int main(void) {
         c1 = c1->prox;
         free(temp);
     }
-
+    
     return 0;
 }
