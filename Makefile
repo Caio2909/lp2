@@ -1,13 +1,11 @@
-TARGET=MAKE
-CC=clang
-SRC=$(wildcard *.c)
-all: argc arquivo_funcoes funcoes
-argc: argc.o
-	clang -o argc.o
-arquivo_funcoes:arquivo_funcoes.c
-	clang -c arquivo_funcoes.c
-funcoes: funcoes.c funcoesh.h
-	clang -o $@ -c $<
-arquivo: arquivo.o
-	clang -o arquivo.o
 
+CC=clang
+
+all: cadastro2 clean
+
+cadastro2: cadastro2.o
+	clang -o cadastro2 cadastro2.o
+cadastro2.o: cadastro2.c	
+	clang -o cadastro2.o -c cadastro2.c
+clean:
+	rm -rf *.o
